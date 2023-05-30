@@ -33,8 +33,11 @@ window.addEventListener('load', function(){
             context.stroke();
         }
         update(){
-            this.speedX = (this.game.mouse.x - this.collisionX)/20;
-            this.speedY = (this.game.mouse.y - this.collisionY)/20;
+            this.dx = this.game.mouse.x - this.collisionX;
+            this.dy = this.game.mouse.y - this.collisionY;
+            const distance = Math.hypot(this.dy, this.dx)
+            this.speedX = this.dx/distance || 0;
+            this.speedY = this.dy/distance || 0;
             this.collisionX += this.speedX;
             this.collisionY += this.speedY;
         }
@@ -63,8 +66,10 @@ window.addEventListener('load', function(){
                 this.mouse.pressed = false;
             });
             canvas.addEventListener('mousemove', (e) => {
+                if(this.mouse.pressed){
                 this.mouse.x = e.offsetX;
                 this.mouse.y = e.offsetY;
+                }
             });
         }
         render(context){
