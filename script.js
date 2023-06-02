@@ -76,7 +76,8 @@ window.addEventListener('load', function(){
             if (this.collisionX < this.collisionRadius) this.collisionX =this.collisionRadius;
             else if (this.collisionX > this.game.width - this.collisionRadius) this.game.width - this.collisionRadius; 
             //vertical boundaries
-            if (this.collisionY)
+            if (this.collisionY < this.game.topMargin + this.collisionRadius) this.collisionY < this.game.topMargin + this.collisionRadius
+            else if (this.collisionY > this.game.height - this.collisionRadius) this.collisionY = this.game.height - this.collisionRadius;
             // collisions with obstacles
             this.game.obstacles.forEach(obstacle => {
                 //[(distance < SumOfRadii), distance, SumOfRadii, dx, dy]
