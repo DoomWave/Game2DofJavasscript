@@ -139,7 +139,7 @@ window.addEventListener('load', function(){
             this.spriteY = this.collisionY + this.height * 0.5;
         }
         draw(context){
-            context.drawImage();
+            context.drawImage(this.image, this.spriteX, this.spriteY);
         }
     }
 
