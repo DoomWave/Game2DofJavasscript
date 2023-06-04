@@ -122,6 +122,9 @@ window.addEventListener('load', function(){
                 context.stroke();
             }
         }
+        update(){
+
+        }
     }
 
     class Egg {
@@ -184,6 +187,7 @@ window.addEventListener('load', function(){
             this.maxEggs = 10; 
             this.obstacles = [];
             this.eggs = [];
+            this.gameObjects = [];
             this.mouse = {
                 x: this.width * 0.5,
                 y: this.height * 0.5,
@@ -213,14 +217,15 @@ window.addEventListener('load', function(){
         render(context, deltaTime){
             if (this.timer > this.interval){
                 context.clearRect(0, 0, this.width, this.height);
-                this.eggs.forEach(egg => {
-                    egg.draw(context);
-                    egg.update();
+                this.gameObjects = [this.player, ...this.eggs, ...this.obstacles ];
+                // sot by vertical position
+                this.gameObjects.sort((a, b) => {
+                    return a.collisionY - b.collisionY;
+                })
+                this.gameObjects.forEach(object => {
+                    object.draw(context);
+                    object.update();
                 });
-                this.obstacles.forEach(obstacle => obstacle.draw(context)); 
-                
-                this.player.draw(context);
-                this.player.update();
                 this.timer = 0;
             }
             this.timer += deltaTime;
