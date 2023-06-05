@@ -187,6 +187,22 @@ window.addEventListener('load', function(){
         }
         draw(context){
             context.drawImage(this.image, this.spriteX, this.spriteY);
+            if (this.game.debug){
+                context.beginPath();
+                context.arc(this.collisionX, this.collisionY, this.collisionRadius, 0, Math.PI * 2);
+                context.save();
+                context.globalAlpha = 0.5;
+                context.fill();
+                context.restore();
+                context.stroke();
+            }
+        }
+        update(){
+            this.collisionX -= this.speedX;
+            if (this.spriteX + this.width < 0){
+                this.collisionX = this.game.width;
+                this.collisionY = Math.random() * this.game.height;
+            }
         }
     }
 
@@ -207,6 +223,7 @@ window.addEventListener('load', function(){
             this.maxEggs = 5; 
             this.obstacles = [];
             this.eggs = [];
+            this.enemies = [];
             this.gameObjects = [];
             this.mouse = {
                 x: this.width * 0.5,
@@ -237,7 +254,7 @@ window.addEventListener('load', function(){
         render(context, deltaTime){
             if (this.timer > this.interval){
                 context.clearRect(0, 0, this.width, this.height);
-                this.gameObjects = [this.player, ...this.eggs, ...this.obstacles ];
+                this.gameObjects = [this.player, ...this.eggs, ...this.obstacles, ...this.enemies];
                 // sot by vertical position
                 this.gameObjects.sort((a, b) => {
                     return a.collisionY - b.collisionY;
@@ -268,7 +285,13 @@ window.addEventListener('load', function(){
         addEgg(){
             this.eggs.push(new Egg(this));
         }
+        addEnemy(){
+            this.enemies.push(new Enemy(this));
+        }
         init(){
+            for (let i = 0; i < 3; i++){
+                this.addEnemy();
+            }
             let attempts = 0;
             while (this.obstacles.length < this.numberOfObstacles && attempts < 500){
                 let testObstacle = new Obstacle(this);
