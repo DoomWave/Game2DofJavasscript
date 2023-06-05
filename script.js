@@ -170,6 +170,16 @@ window.addEventListener('load', function(){
         }
     }
 
+    class Enemy {
+        constructor(game){
+            this.game = game;
+            this.collisionRadius = 30;
+            this.collisionX = this.game.width;
+            this.collisionY = Math.random() * this.game.height;
+            this.speedX = Math.random() * 3 + 0.5;
+        }
+    }
+
     class Game {
         constructor(canvas){
             this.canvas = canvas;
@@ -182,9 +192,9 @@ window.addEventListener('load', function(){
             this.timer = 0;
             this.interval = 1000/this.fps;
             this.eggTimer = 0;
-            this.eggInterval = 100;
+            this.eggInterval = 20;
             this.numberOfObstacles = 10;
-            this.maxEggs = 10; 
+            this.maxEggs = 5; 
             this.obstacles = [];
             this.eggs = [];
             this.gameObjects = [];
@@ -234,7 +244,6 @@ window.addEventListener('load', function(){
             if (this.eggTimer > this.eggInterval && this.eggs.length < this.maxEggs){
                 this.addEgg();
                 this.eggTimer = 0;
-                console.log(this.eggs);
             } else {
                 this.eggTimer += deltaTime;
             }
