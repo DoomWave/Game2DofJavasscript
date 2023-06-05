@@ -177,6 +177,16 @@ window.addEventListener('load', function(){
             this.collisionX = this.game.width;
             this.collisionY = Math.random() * this.game.height;
             this.speedX = Math.random() * 3 + 0.5;
+            this.image = document.getElementById('toad');
+            this.spriteWidth = 140;
+            this.spriteHeight = 260;
+            this.width = this.spriteWidth;
+            this.height = this.spriteHeight;
+            this.spriteX;
+            this.spriteY;
+        }
+        draw(context){
+            context.drawImage(this.image, this.spriteX, this.spriteY);
         }
     }
 
