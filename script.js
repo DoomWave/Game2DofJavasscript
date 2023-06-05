@@ -174,14 +174,14 @@ window.addEventListener('load', function(){
         constructor(game){
             this.game = game;
             this.collisionRadius = 30;
-            this.collisionX = this.game.width;
-            this.collisionY = Math.random() * this.game.height;
-            this.speedX = Math.random() * 3 + 0.5;
+            this.speedX = Math.random() * 3 + 5;
             this.image = document.getElementById('toad');
             this.spriteWidth = 140;
             this.spriteHeight = 260;
             this.width = this.spriteWidth;
             this.height = this.spriteHeight;
+            this.collisionX = this.game.width + this.width + Math.random() * this.game.width * 0.5;
+            this.collisionY = this.game.topMargin + (Math.random() * (this.game.height - this.game.topMargin));
             this.spriteX;
             this.spriteY;
         }
@@ -198,10 +198,12 @@ window.addEventListener('load', function(){
             }
         }
         update(){
+            this.spriteX = this.collisionX - this.width * 0.5;
+            this.spriteY = this.collisionY - this.height + 40;
             this.collisionX -= this.speedX;
             if (this.spriteX + this.width < 0){
-                this.collisionX = this.game.width;
-                this.collisionY = Math.random() * this.game.height;
+                this.collisionX = this.game.width + this.width + Math.random() * this.game.width * 0.5;
+                this.collisionY = this.game.topMargin + (Math.random() * (this.game.height - this.game.topMargin));
             }
         }
     }
@@ -243,8 +245,8 @@ window.addEventListener('load', function(){
             });
             canvas.addEventListener('mousemove', e => {
                 if(this.mouse.pressed){
-                this.mouse.x = e.offsetX;
-                this.mouse.y = e.offsetY;
+                    this.mouse.x = e.offsetX;
+                    this.mouse.y = e.offsetY;
                 }
             });
             window.addEventListener('keydown', e => {
@@ -277,7 +279,7 @@ window.addEventListener('load', function(){
         }
         checkCollision(a, b){
             const dx = a.collisionX - b.collisionX;
-            const dy = a.collisionX - b.collisionX;
+            const dy = a.collisionY - b.collisionY;
             const distance = Math.hypot(dy, dx);
             const SumOfRadii = a.collisionRadius + b.collisionRadius;
             return [(distance < SumOfRadii), distance, SumOfRadii, dx, dy];
@@ -289,7 +291,7 @@ window.addEventListener('load', function(){
             this.enemies.push(new Enemy(this));
         }
         init(){
-            for (let i = 0; i < 3; i++){
+            for (let i = 0; i < 5; i++){
                 this.addEnemy();
             }
             let attempts = 0;
