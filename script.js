@@ -157,7 +157,7 @@ window.addEventListener('load', function(){
         update(){
             this.spriteX = this.collisionX - this.width * 0.5;
             this.spriteY = this.collisionY - this.height * 0.5 - 30;
-            let collisionObjects = [this.game.player, ...this.game.obstacles];
+            let collisionObjects = [this.game.player, ...this.game.obstacles, ...this.game.enemies];
             collisionObjects.forEach(object => {
                 let [collision, distance, SumOfRadii, dx, dy] = this.game.checkCollision(this, object);
                 if (collision){
@@ -205,6 +205,16 @@ window.addEventListener('load', function(){
                 this.collisionX = this.game.width + this.width + Math.random() * this.game.width * 0.5;
                 this.collisionY = this.game.topMargin + (Math.random() * (this.game.height - this.game.topMargin));
             }
+            let collisionObjects = [this.game.player, ...this.game.obstacles, ...this.game.eggs];
+            collisionObjects.forEach(object => {
+                let [collision, distance, SumOfRadii, dx, dy] = this.game.checkCollision(this, object);
+                if (collision){
+                    const unit_x = dx / distance;
+                    const unit_y = dy / distance;
+                    this.collisionX = object.collisionX + (SumOfRadii + 1) * unit_x;
+                    this.collisionY = object.collisionY + (SumOfRadii + 1) * unit_y;
+                }
+            });
         }
     }
 
