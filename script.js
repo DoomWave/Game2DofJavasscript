@@ -141,8 +141,9 @@ window.addEventListener('load', function(){
             this.height = this.spriteHeight;
             this.spriteX;
             this.spriteY;
-            this,hatchTimer = 0;
+            this.hatchTimer = 0;
             this.hatchInterval = 5000;
+            this.markedForDeletion = false;
         }
         draw(context){
             context.drawImage(this.image, this.spriteX, this.spriteY);
@@ -156,9 +157,10 @@ window.addEventListener('load', function(){
                 context.stroke();
             }
         }
-        update(){
+        update(deltaTime){
             this.spriteX = this.collisionX - this.width * 0.5;
             this.spriteY = this.collisionY - this.height * 0.5 - 30;
+            // collisions
             let collisionObjects = [this.game.player, ...this.game.obstacles, ...this.game.enemies];
             collisionObjects.forEach(object => {
                 let [collision, distance, SumOfRadii, dx, dy] = this.game.checkCollision(this, object);
@@ -169,6 +171,14 @@ window.addEventListener('load', function(){
                     this.collisionY = object.collisionY + (SumOfRadii + 1) * unit_y;
                 }
             });
+            //hatching
+            if (this.hatchTimer > this.hatchInterval){
+                this.markedForDeletion = true;
+                this.game.removeGameObjects();
+                console.log(this.game.eggs);
+            } else {
+                this.hatchTimer += deltaTime;
+            }
         }
     }
 
@@ -300,7 +310,7 @@ window.addEventListener('load', function(){
                 })
                 this.gameObjects.forEach(object => {
                     object.draw(context);
-                    object.update();
+                    object.update(deltaTime);
                 });
                 this.timer = 0;
             }
@@ -326,6 +336,9 @@ window.addEventListener('load', function(){
         }
         addEnemy(){
             this.enemies.push(new Enemy(this));
+        }
+        removeGameObjects(){
+            this.eggs = this.eggs.filter(object => object.markedForDeletion);
         }
         init(){
             for (let i = 0; i < 5; i++){
