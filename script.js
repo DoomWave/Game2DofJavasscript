@@ -7,6 +7,8 @@ window.addEventListener('load', function(){
     ctx.fillStyle = 'white';
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'white';
+    ctx.font = '40px Helvetica'
+    ctx.textAlign = 'center';
 
     class Player {
         constructor(game){
@@ -155,6 +157,8 @@ window.addEventListener('load', function(){
                 context.fill();
                 context.restore();
                 context.stroke();
+                const displayTimer = this.hatchTimer.toFixed(0);
+                context.fillText(displayTimer, this.collisionX, this.collisionY - this.collisionRadius);
             }
         }
         update(deltaTime){
