@@ -144,7 +144,7 @@ window.addEventListener('load', function(){
             this.spriteX;
             this.spriteY;
             this.hatchTimer = 0;
-            this.hatchInterval = 5000;
+            this.hatchInterval = 3000;
             this.markedForDeletion = false;
         }
         draw(context){
@@ -157,8 +157,8 @@ window.addEventListener('load', function(){
                 context.fill();
                 context.restore();
                 context.stroke();
-                const displayTimer = this.hatchTimer.toFixed(0);
-                context.fillText(displayTimer, this.collisionX, this.collisionY - this.collisionRadius);
+                const displayTimer = (this.hatchTimer * 0.001)
+                context.fillText(displayTimer, this.collisionX, this.collisionY - this.collisionRadius * 2.5);
             }
         }
         update(deltaTime){
@@ -177,9 +177,9 @@ window.addEventListener('load', function(){
             });
             //hatching
             if (this.hatchTimer > this.hatchInterval){
+                this.game.hatchlings.push(new Larva(this.game, this.collisionX, this.collisionY));
                 this.markedForDeletion = true;
                 this.game.removeGameObjects();
-                console.log(this.game.eggs);
             } else {
                 this.hatchTimer += deltaTime;
             }
@@ -277,6 +277,7 @@ window.addEventListener('load', function(){
             this.obstacles = [];
             this.eggs = [];
             this.enemies = [];
+            this.hatchlings = [];
             this.gameObjects = [];
             this.mouse = {
                 x: this.width * 0.5,
@@ -307,7 +308,7 @@ window.addEventListener('load', function(){
         render(context, deltaTime){
             if (this.timer > this.interval){
                 context.clearRect(0, 0, this.width, this.height);
-                this.gameObjects = [this.player, ...this.eggs, ...this.obstacles, ...this.enemies];
+                this.gameObjects = [this.player, ...this.eggs, ...this.obstacles, ...this.enemies, ...this.hatchlings];
                 // sot by vertical position
                 this.gameObjects.sort((a, b) => {
                     return a.collisionY - b.collisionY;
