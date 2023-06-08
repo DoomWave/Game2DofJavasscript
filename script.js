@@ -157,7 +157,7 @@ window.addEventListener('load', function(){
                 context.fill();
                 context.restore();
                 context.stroke();
-                const displayTimer = (this.hatchTimer * 0.001)
+                const displayTimer = (this.hatchTimer * 0.001).toFixed(0);
                 context.fillText(displayTimer, this.collisionX, this.collisionY - this.collisionRadius * 2.5);
             }
         }
@@ -208,6 +208,10 @@ window.addEventListener('load', function(){
             this.collisionY -= this.speedY;
             this.spriteX = this.collisionX - this.width * 0.5;
             this.spriteY = this.collisionY - this.height * 0.5;
+            //move to safety
+            if (this.collisionY < this.game.topMargin){
+                this.markedForDeletion = true;
+            }
         }
     }
 
